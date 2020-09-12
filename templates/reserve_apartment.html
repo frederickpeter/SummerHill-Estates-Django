@@ -1,0 +1,234 @@
+{% load static %}<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Properties</title>
+    <link rel="icon" href="{% static 'img/summerhill-favicon.png' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <!-- themify CSS -->
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+   <!--::menu part start::-->
+   <header class="main_menu">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<nav class="navbar navbar-expand-lg navbar-light">
+						<a class="navbar-brand" href="{% url 'index' %}"> <img src="{% static 'img/summerhill_logo.png' %}" alt="logo"> </a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+							aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse main-menu-item" id="navbarNav">
+							<ul class="navbar-nav">
+								<li class="nav-item active">
+									<a class="nav-link" href="{% url 'index' %}">Home<span class="sr-only">(current)</span></a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{% url 'about' %}">about</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{% url 'properties' %}">Properties</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link page-scroll" href="blog.html">Blog</a>
+								</li>
+								<!-- <li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Pages
+									</a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="single-blog.html">Single blog</a>
+										<a class="dropdown-item" href="elements.html">Elements</a>
+									</div>
+								</li> -->
+								<li class="nav-item">
+									<a class="nav-link" href="contact.html">Contact us</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										{% firstof user.get_username %}
+									</a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'accounts:my_dashboard' %}">My Dashboard</a>
+										<a class="dropdown-item" href="{% url 'accounts:my_account' %}">My Account</a>
+										<a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+									</div>
+                        </li>
+                        {% endif %}
+                        <li style="visibility: hidden;" class="nav-item">
+									<a class="nav-link" href="#">{% firstof user.get_username %}</a>
+                        </li>
+							</ul>
+						</div>
+						{% if not user.is_authenticated %}
+						<div class="btn_1 d-none d-lg-block">
+							<a href="{% url 'accounts:login' %}" class="float-right">Login</a>
+                  </div>
+                  {% endif %}
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+   <!--::menu part end::-->
+
+    <!--::breadcrumb part end::-->
+    <section class="breadcrumb blog_bg">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-12">
+                  <div class="breadcrumb_iner">
+                      <div class="breadcrumb_iner_item">
+                          <h2>Reserve Apartment</h2>
+                          <p><a style="color:white" href="{% url 'index' %}">Home</a><span class="ti-angle-double-right"></span>Reserve Apartment</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+   </section>
+   <!--::breadcrumb part end::-->
+    
+   <!--::apartment_part end::-->
+   <div class="apartment_part">
+      <div class="container" style="width: 100%; text-align: center;">
+         {% if not errors %}
+         <h2>{{apartment}}</h2>
+         <h4>Price: {{apartment.room_type.price_per_day}} per night</h4>
+         {% endif %}
+      </div>
+      <div class="container">
+         <div class="row">
+
+            <div class="col-lg-12 col-md-12 col-sm-10">
+               <div style="width: 100%; text-align: center;">
+                  <h3>{{errors}}</h3>
+               </div>
+               
+                 <form method="post" class="mb-4" novalidate>
+                     {% csrf_token %}
+                     {% include 'includes/form.html' %}
+                     {% if not errors %}
+                       <button type="submit" class="btn btn-success">Reserve Apartment</button>
+                     {% endif %}
+     
+                     
+                   </form>
+             </div>
+            
+         </div>
+        
+         
+      </div>
+      
+   </div>
+   <!--::apartment_part end::-->
+    
+   <!--::footer_part start::-->
+   <footer class="footer_part">
+      <div class="container">
+         <div class="row">
+            <div class="col-sm-6 col-lg-4">
+               <div class="single_footer_part">
+                  <h4>About Us</h4>
+                  <p>SummerHill Estate Limited is a subsidiary of Nananom Group located in Canada. Nananom group has been in existence since 2006. It began operation as a full business entity in June, 2006 as a financial institution in Ontario.</p>
+                  <!-- <a href="#" class="footer_logo"> <img src="{% static 'img/footer_logo.png' %}" alt="#"> </a> -->
+               </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+               <div class="single_footer_part">
+                  <h4>Important Links</h4>
+                  <ul class="list-unstyled">
+                     <li><a href="{% url 'index' %}"> Home</a></li>
+                     <li><a href="{% url 'about' %}">About</a></li>
+                     <li><a href="{% url 'properties' %}">Properties</a></li>
+                     <li><a href="#">Blog</a></li>
+                     <li><a href="#">Contact Us</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+               <div class="single_footer_part">
+                  <h4>Contact Info</h4>
+                  <p>Address: SummerHill Estate
+                     East Legon Hills,
+                     Accra - Ghana.</p>
+                  <p>Phone : +233-055-253-1100</p>
+                  <p>Email : info@summerhillestate.com</p>
+               </div>
+            </div>
+           
+            <!-- <div class="col-sm-6 col-lg-3">
+               <div class="single_footer_part">
+                  <h4>Newsletter</h4>
+                  <p>Heaven fruitful doesn't over lesser in days. Appear creeping seasons deve behold bearing days open
+                  </p>
+                  <div class="mail_part">
+                     <input type="text" placeholder="Email Address" class="placeholder hide-on-focus">
+                     <a href="" class="email_icon"><i class="far fa-paper-plane"></i></a>
+                  </div>
+               </div>
+            </div> -->
+         </div>
+         <hr>
+         <div class="row">
+            <div class="col-sm-6 col-lg-6">
+               <div class="copyright_text">
+                  <P><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                     SummerHill Estates | Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></P>
+               </div>
+            </div>
+            <div class="col-sm-6 col-lg-6">
+               <div class="footer_icon">
+                  <ul class="list-unstyled">
+                     <li><a href="#" class="single_social_icon"><i class="fab fa-facebook-f"></i></a></li>
+                     <li><a href="#" class="single_social_icon"><i class="fab fa-twitter"></i></a></li>
+                     <li><a href="#" class="single_social_icon"><i class="fas fa-globe"></i></a></li>
+                     <li><a href="#" class="single_social_icon"><i class="fab fa-behance"></i></a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </footer>
+   <!--::footer_part end::-->
+
+   <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="{% static 'js/jquery-1.12.1.min.js' %}"></script>
+   <!-- popper js -->
+   <script src="{% static 'js/popper.min.js' %}"></script>
+   <!-- bootstrap js -->
+   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+   <!-- easing js -->
+   <script src="{% static 'js/jquery.magnific-popup.js' %}"></script>
+   <!-- particles js -->
+   <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+   <!-- easing js -->
+   <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+   <!-- custom js -->
+   <script src="{% static 'js/custom.js' %}"></script>
+</body>
+
+</html>

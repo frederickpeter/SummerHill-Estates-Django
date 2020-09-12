@@ -1,0 +1,93 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Property, Room_Type, Apartment
+from django.views.generic import ListView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required
+from .forms import NewReservationForm
+from django.db.models import Count, Q
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
+
+#View for the Index Page
+def index(request):
+    my_property = Property.objects.all()[:3]
+    return render(request, 'index.html', {'properties':my_property})
+
+
+def about(request):
+    return render(request, 'about.html')
+
+# def properties(request):
+#     my_property = Property.objects.all()
+#     return render(request, 'properties.html', {'properties':my_property})
+
+class PropertyView(ListView):
+    model = Property
+    context_object_name = 'properties'
+    template_name = 'properties.html'
+    paginate_by = 6
+
+
+def single_property(request, slug):
+    myproperty = get_object_or_404(Property, slug=slug)
+    room_types = myproperty.room_types.annotate(apartmentCount=Count("apartments", filter=Q(apartments__status__startswith="Avail")))
+    fully_booked = True
+
+    # loop through to check if you'll find atleast 1 available apartment, then set a marker
+    for i in room_types:
+        if i.apartmentCount > 0:
+            fully_booked = False
+            break
+
+    return render(request, 'single-property.html', {'name':myproperty.name, 'fully_booked':fully_booked, 'description':myproperty.description, 'room_types':room_types})
+
+
+def available_apartments(request, slug, room_type):
+    # myproperty = get_object_or_404(Property, slug=slug)
+    room_typee = get_object_or_404(Room_Type, pk=room_type, property__slug=slug)
+    available_apartments = Apartment.objects.filter(room_type__pk=room_typee.pk, status__startswith='Avail')
+    return render(request, 'available_apartments.html', {'available_apartments':available_apartments, 'room_type':room_typee})
+
+@login_required
+def reserve_apartment(request, apartment):
+    apartment = get_object_or_404(Apartment, pk=apartment)
+    is_available = apartment.status=="Available"
+
+   #check if apartment is available. if not, send an error message
+    if not is_available:
+        return render(request, 'reserve_apartment.html', {'apartment': apartment, 'errors':'Sorry! The apartment has been reserved! Kindly try another apartment'})
+
+    if request.method == 'POST':
+        form = NewReservationForm(request.POST)
+        if form.is_valid():
+            #check if room is available again
+            if is_available:
+               
+                reservation = form.save(commit=False)
+                reservation.apartment = apartment
+                reservation.user = request.user
+                reservation.duration_type = form.cleaned_data.get('duration_type')
+                reservation.duration = form.cleaned_data.get('duration')
+                reservation.phone = form.cleaned_data.get('phone')
+                reservation.save()
+
+                apartment.status = 'Booked'
+                apartment.save()
+
+
+                # mail_admins("subject", "message", fail_silently=False, connection=None, html_message=None)
+                message = "Hello, " +request.user.get_full_name() + " has made a reservation for "+apartment.name
+                send_mail("SummerHill Estates: Apartment Reservation",message, "summer-hill-estates@gmail.com", ['plangepeter@gmail.com', 'frederick.plange@ashesi.edu.gh'], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+
+                ##LOOK AT THIS
+              
+            else:
+                return render(request, 'reserve_apartment.html', {'apartment': apartment, 'errors':'Sorry! The apartment has been reserved! Kindly try another apartment'})
+
+            # return redirect('reservation-success')  
+            return render(request, 'reservation_success.html')      
+
+    else:
+        form = NewReservationForm()
+    return render(request, 'reserve_apartment.html', {'form':form, 'apartment':apartment})
