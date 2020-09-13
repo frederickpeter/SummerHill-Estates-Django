@@ -70,6 +70,20 @@ def reserve_apartment(request, apartment):
                 reservation.duration_type = form.cleaned_data.get('duration_type')
                 reservation.duration = form.cleaned_data.get('duration')
                 reservation.phone = form.cleaned_data.get('phone')
+
+                duration_type = form.cleaned_data.get('duration_type')
+                duration = form.cleaned_data.get('duration')
+                price_per_day = apartment.room_type.price_per_day
+
+                if duration_type == "Day":
+                    reservation.total_amount = duration * price_per_day
+                elif duration_type == "Week":
+                    reservation.total_amount = ( duration * 7 ) * price_per_day
+                elif duration_type == "Month":
+                    reservation.total_amount = ( duration * 30 ) * price_per_day
+                elif duration_type == "Year":
+                    reservation.total_amount = ( duration * 365 ) * price_per_day
+
                 reservation.save()
 
                 apartment.status = 'Booked'
@@ -77,8 +91,8 @@ def reserve_apartment(request, apartment):
 
 
                 # mail_admins("subject", "message", fail_silently=False, connection=None, html_message=None)
-                message = "Hello, " +request.user.get_full_name() + " has made a reservation for "+apartment.name
-                send_mail("SummerHill Estates: Apartment Reservation",message, "summer-hill-estates@gmail.com", ['plangepeter@gmail.com', 'frederick.plange@ashesi.edu.gh'], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+                # message = "Hello, " +request.user.get_full_name() + " has made a reservation for "+apartment.name
+                # send_mail("SummerHill Estates: Apartment Reservation",message, "summer-hill-estates@gmail.com", ['plangepeter@gmail.com', 'frederick.plange@ashesi.edu.gh'], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
 
                 ##LOOK AT THIS
               

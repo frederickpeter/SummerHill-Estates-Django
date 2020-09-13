@@ -73,7 +73,7 @@ class Apartment(models.Model):
         ('Available', 'Available'),
         ('Booked', 'Booked')
     )
-    status = models.CharField(max_length=20, choices=STATUS)
+    status = models.CharField(max_length=20, choices=STATUS, default="Available")
 
     class Meta:
         ordering = ["name"]
@@ -94,8 +94,14 @@ class Reservation(models.Model):
         ('Month', 'Month'),
         ('Year', 'Year')
     )
-    duration_type = models.CharField(max_length=5, choices=DURATION_TYPE)
+    duration_type = models.CharField(max_length=7, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
+    total_amount = models.DecimalField(max_digits=7, decimal_places=2)
+    STATUS = (
+        ('Paid', 'Paid'),
+        ('No Payment', 'No Payment')
+    )
+    first_payment = models.CharField(max_length=15, choices=STATUS, default="No Payment")
 
     class Meta:
         ordering = ["-date"]
