@@ -11,9 +11,10 @@ def start():
 
     # Adding this job here instead.
     # everyday  or rather every 24 hours
-    scheduler.add_job(incomplete_reservations, 'interval', days=1, start_date='2020-08-23 08:29:00', id="incomplete_reservations",replace_existing=True)
-    #every 12 hours
-    scheduler.add_job(incomplete_reservations, 'interval', hours=12, start_date='2020-08-23 00:00:00', id="incomplete_reservations2",replace_existing=True)
+    # scheduler.add_job(incomplete_reservations, 'interval', days=1, start_date='2020-08-23 08:45:00', id="incomplete_reservations",replace_existing=True)
+    
+    #every 6 hours
+    scheduler.add_job(incomplete_reservations, 'interval', hours=6, start_date='2020-08-23 00:00:00', id="incomplete_reservations2",replace_existing=True)
 
 
     scheduler.start()
