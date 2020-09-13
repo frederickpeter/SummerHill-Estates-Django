@@ -112,7 +112,7 @@ def reserve_apartment(request, apartment):
 
 def incomplete_reservations():
     print("Checking incomplete reservations")
-    i_reservervations = Reservation.objects.filter(made_payment=False)
+    i_reservervations = Reservation.objects.filter(first_payment__exact="No Payment")
     current_time = timezone.now()
     for reservation in i_reservervations:
         time_diff_hours = (current_time - reservation.date).total_seconds()/3600
@@ -127,6 +127,6 @@ def incomplete_reservations():
         elif time_diff_hours > 12:
             print("Send reminder to make payments for {}:".format(reservation.user.get_full_name()))
             message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 24 hours if no payment is made."
-            send_mail("SummerHill Estates: Apartment Reservation Payment",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+            # send_mail("SummerHill Estates: Apartment Reservation Payment",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
 
 
