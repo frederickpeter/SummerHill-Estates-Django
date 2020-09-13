@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = "properties"
+
 urlpatterns = [
     path('', views.PropertyView.as_view(), name='properties'),
     path('reserve/<int:apartment>', views.reserve_apartment, name='reserve-apartment'), 

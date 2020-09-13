@@ -96,6 +96,7 @@ class Reservation(models.Model):
     )
     duration_type = models.CharField(max_length=5, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
+    made_payment = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-date"]
