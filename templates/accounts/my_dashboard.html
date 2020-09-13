@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
     <!-- style CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   </head>
   <body>
@@ -158,7 +160,7 @@
                               <td>{{reservation.total_amount}}</td>
                               <!-- <td>{{reservation.status}}</td> -->
                               <td><a class="btn btn-danger" href="{% url 'accounts:cancel_reservation' reservation.pk %}">Cancel</a></td>
-                              <td><a class="btn btn-primary" href="#">Pay</a></td>
+                              <td><a class="btn btn-primary" href="#" onclick="pay('{{reservation.pk}}','{{reservation.total_amount}}')">Pay</a></td>
                            </tr>
                            {% endfor %}
                            {% endif %}
@@ -253,6 +255,100 @@
          </div>
       </div>
    </footer>
+   <script src="https://js.paystack.co/v1/inline.js"></script> 
+   <script>
+
+      function pay(reservation, total){
+         var token = "{{ csrf_token }}"
+
+         Swal.fire({
+            title: 'Would you like to make payment?',
+            input: 'text',
+            inputValue:total,
+            inputAttributes: {
+               autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Make Payment',
+            preConfirm: (value) => {
+               if(value >= (0.5 * total)){
+                  let handler = PaystackPop.setup({
+                     key: 'pk_test_8f1f706f234b27b8b60145abd74783eeaa0b96f4', // Replace with your public key
+                     email: "{{user.email}}",
+                     amount: total * 100, //always multiply by 100
+                     currency:"GHS",
+                     firstname: "{{user.first_name}}",
+                     lastname: "{{user.last_name}}",
+                     onClose: function(){
+                        console.log('Window closed.');
+                     },
+                     callback: function(response){
+
+                        // execute the alert
+                        let timerInterval
+                        Swal.fire({
+                        title: 'Loading!',
+                        html: 'Please give us a minute to verify the payment.',
+                        timer: 20000,
+                        allowOutsideClick:false,
+                        timerProgressBar: true,
+                        onBeforeOpen: () => {
+                           Swal.showLoading()
+                           timerInterval = setInterval(() => {
+                              const content = Swal.getContent()
+                              if (content) {
+                              const b = content.querySelector('b')
+                              if (b) {
+                                 b.textContent = Swal.getTimerLeft()
+                              }
+                              }
+                           }, 100)
+                        },
+                        onClose: () => {
+                           clearInterval(timerInterval)
+                        }
+                        }).then((result) => {
+                        /* Read more about handling dismissals below */
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                           console.log('I was closed by the timer')
+                        }
+                        })
+
+                        // verify payment
+
+
+                        // $.ajax({
+                        // url: "/hostel/verify_transaction?response="+response.reference+"&res="+reservation+"&room="+room,
+                        // success: function (response) {
+                        //    // the transaction status is in response.data.status
+                        //    if(response.data.status=="success"){
+
+                        //       window.location.href= "{% url 'accounts:my_dashboard' %}"
+                        //    }else{
+                        //       Swal.fire(
+                        //       'Sorry!',
+                        //       'Your payment verification failed! Contact the Charlotte Team for assistance',
+                        //       'error'
+                        //       )
+                        //    }
+                        // },
+                        // error: function(response){
+                        //    alert('error')
+                        // }
+                        // });
+                     }
+                  });
+                  handler.openIframe();
+
+               }else{
+                  alert('less')
+               }
+            },
+            allowOutsideClick: true
+         })
+
+      }
+   </script>
    <!--::footer_part end::-->
 
     <!-- jquery plugins here-->
@@ -270,6 +366,8 @@
    <script src="{% static 'js/jquery.easing.min.js' %}"></script>
    <!-- custom js -->
    <script src="{% static 'js/custom.js' %}"></script>
+
+
 </body>
 
 </html>

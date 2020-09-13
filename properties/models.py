@@ -96,12 +96,13 @@ class Reservation(models.Model):
     )
     duration_type = models.CharField(max_length=7, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
-    total_amount = models.DecimalField(max_digits=7, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     STATUS = (
         ('Paid', 'Paid'),
         ('No Payment', 'No Payment')
     )
     first_payment = models.CharField(max_length=15, choices=STATUS, default="No Payment")
+    # made_payment = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-date"]
