@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'properties',
-    'widget_tweaks'
+    'widget_tweaks',
+    "properties.apps.PropertiesConfig",
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,4 @@ EMAIL_USE_TLS=True
 DEFAULT_FROM_EMAIL = 'Summer-hill-estates@gmail.com'
 
 ADMINS = [('Frederick Peter Plange', 'frederick.plange@alumni.ashesi.edu.gh')]
+SCHEDULER_AUTOSTART = True
