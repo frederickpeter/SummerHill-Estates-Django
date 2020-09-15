@@ -1,9 +1,6 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.files.storage import FileSystemStorage
-
-fs = FileSystemStorage(location='/media/images')
 
 def get_name(self):
     return '{} {}'.format(self.first_name, self.last_name)
@@ -26,7 +23,7 @@ class Property(models.Model):
     name = models.CharField(max_length=150, help_text='Name must be a maximum of 150 characters', unique=True)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(max_length=4000, help_text='Name must be a maximum of 4000 characters')
-    image1 = models.ImageField(null=True, blank=True, storage=fs, max_length=254)
+    image1 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image2 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image3 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image4 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
