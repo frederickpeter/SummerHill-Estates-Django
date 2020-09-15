@@ -2,6 +2,8 @@ from django.urls import path
 from accounts import views as account_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+# from django.conf import settings
+# from django.conf.urls.static import static
 
 #add namespace if you want, meaning to access these paths you have to do 'accounts:<url-name>'
 app_name = 'accounts'
@@ -20,3 +22,6 @@ urlpatterns = [
 
    
 ]
+
+# if settings.DEBUG: # new
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

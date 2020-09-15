@@ -21,14 +21,14 @@ class Facility(models.Model):
 # Create your models here.
 class Property(models.Model):
     name = models.CharField(max_length=150, help_text='Name must be a maximum of 150 characters', unique=True)
-    slug = models.SlugField(max_length=80, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(max_length=4000, help_text='Name must be a maximum of 4000 characters')
-    image1 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
-    image2 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
-    image3 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
-    image4 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
-    image5 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
-    brochure = models.FileField(null=True, blank=True, upload_to='static/documents/', max_length=150) 
+    image1 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
+    image2 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
+    image3 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
+    image4 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
+    image5 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
+    brochure = models.FileField(null=True, blank=True, upload_to='documents/', max_length=255) 
     facilities = models.ManyToManyField(Facility, through='Property_Facility')
     
     class Meta:
@@ -55,7 +55,7 @@ class Room_Type(models.Model):
     capacity = models.PositiveSmallIntegerField()
     property = models.ForeignKey(Property, related_name='room_types', on_delete=models.CASCADE)
     price_per_day = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
-    image1 = models.ImageField(null=True, blank=True, upload_to='static/images/', max_length=100)
+    image1 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=255)
 
     class Meta:
         ordering = ["capacity"]
