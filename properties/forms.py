@@ -9,5 +9,5 @@ class NewReservationForm(forms.ModelForm):
         #subject is for the Topic class, message is for the Post class
         #these are the fields used to create the form 
         #since message is for Post we had to declare the widget above
-        fields = ['phone','duration_type_length', 'duration']
+        fields = ['phone','duration_type', 'duration']
 
