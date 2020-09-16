@@ -18,7 +18,7 @@ urlpatterns = [
     path('reset/complete/',auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),name='password_reset_complete'),
     path('myaccount/', account_views.UserUpdateView.as_view(), name='my_account'),
     path('mydashboard/', account_views.DashboardView.as_view(), name='my_dashboard'),
-    path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation')
+    path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation'),
 
    
 ]

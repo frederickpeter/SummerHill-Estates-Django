@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, ListView
 from django.contrib.auth.decorators import login_required
-from properties.models import Reservation
+from properties.models import Reservation, Payment
+
 
 # Create your views here.
 def signup(request):
@@ -52,3 +53,5 @@ def cancel_reservation(request, reservation):
     reservation = get_object_or_404(Reservation, pk=reservation, user=request.user)
     reservation.delete()
     return redirect('accounts:my_dashboard') 
+
+

@@ -10,7 +10,9 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 import datetime
 from django.utils import timezone
-
+from django.conf import settings
+import requests
+from django.http import JsonResponse
 
 #View for the Index Page
 def index(request):
@@ -128,4 +130,33 @@ def incomplete_reservations():
             message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 12 hours if no payment is made."
             send_mail("SummerHill Estates: Apartment Reservation Payment (test)",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
 
-# def webhook(request):
+
+
+@login_required
+def payment(request):
+    reference = request.GET.get('response', None)
+    reservation = request.GET.get('res', None)
+
+    headers = {
+    'Authorization': settings.PAYSTACK_SECRET_KEY,
+    }
+    response = requests.get('https://api.paystack.co/transaction/verify/'+reference, headers=headers)
+    x = response.json()
+
+    # success = x['data']['status']
+    # amount = x['data']['amount'] / 100
+
+    # if success == "success":
+
+    #     post = Payment.objects.create(
+    #         user = request.user,
+    #         reservation = reservation,
+    #         amount = amount
+    #     )
+
+    #     reservation = Reservation.objects.get(pk=reservation)
+    #     reservation.first_payment = "Paid"
+    #     reservation.save()
+
+
+    return JsonResponse(x, safe=False)

@@ -315,27 +315,29 @@
                         })
 
                         // verify payment
+                        $.ajax({
+                        url: "/properties/verify_transaction?response="+response.reference+"&res="+reservation,
+                        success: function (response) {
+                           // console.log(response.data)
+                           console.log(response)
+                           // console.log(response.data.status)
+                           // the transaction status is in response.data.status
+                           if(response.data.status=="success"){
 
+                              window.location.href= "{% url 'accounts:my_dashboard' %}"
+                           }else{
+                              Swal.fire(
+                              'Sorry!',
+                              'Your payment verification failed! Contact the Summer Hill Team for quick assistance',
+                              'error'
+                              )
+                           }
+                        },
+                        error: function(response){
+                           alert('error')
+                        }
+                        });
 
-                        // $.ajax({
-                        // url: "/hostel/verify_transaction?response="+response.reference+"&res="+reservation+"&room="+room,
-                        // success: function (response) {
-                        //    // the transaction status is in response.data.status
-                        //    if(response.data.status=="success"){
-
-                        //       window.location.href= "{% url 'accounts:my_dashboard' %}"
-                        //    }else{
-                        //       Swal.fire(
-                        //       'Sorry!',
-                        //       'Your payment verification failed! Contact the Charlotte Team for assistance',
-                        //       'error'
-                        //       )
-                        //    }
-                        // },
-                        // error: function(response){
-                        //    alert('error')
-                        // }
-                        // });
                      }
                   });
                   handler.openIframe();
