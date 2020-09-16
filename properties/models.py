@@ -23,7 +23,7 @@ class Property(models.Model):
     name = models.CharField(max_length=150, help_text='Name must be a maximum of 150 characters', unique=True)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(max_length=4000, help_text='Name must be a maximum of 4000 characters')
-    image1 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
+    image1 = models.ImageField(upload_to='images/', max_length=254)
     image2 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image3 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image4 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
