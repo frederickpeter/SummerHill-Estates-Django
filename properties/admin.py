@@ -37,10 +37,10 @@ class ApartmentAdmin(admin.ModelAdmin):
     list_per_page = 10
 #admin.site.register(Room)
 
-@admin.register(Reservation)
-class ReservationAdmin(admin.ModelAdmin):
-    search_fields = ("user__first_name__icontains", "user__last_name__icontains", "apartment__name__icontains", "phone__contains")
-    list_per_page = 10
+# @admin.register(Reservation)
+# class ReservationAdmin(admin.ModelAdmin):
+#     search_fields = ("user__first_name__icontains", "user__last_name__icontains", "apartment__name__icontains", "phone__contains")
+#     list_per_page = 10
 #admin.site.register(Reservation)
 
 @admin.register(Property_Facility)
