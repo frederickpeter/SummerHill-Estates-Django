@@ -17,8 +17,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', success_url=reverse_lazy('accounts:password_reset_complete')), name='password_reset_confirm'),
     path('reset/complete/',auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),name='password_reset_complete'),
     path('myaccount/', account_views.UserUpdateView.as_view(), name='my_account'),
-    path('mydashboard/', account_views.DashboardView.as_view(), name='my_dashboard'),
-    path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation')
+    # path('mydashboard/', account_views.DashboardView.as_view(), name='my_dashboard'),
+    # path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation')
 
    
 ]
