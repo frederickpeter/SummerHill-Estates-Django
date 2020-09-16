@@ -83,31 +83,31 @@ class Apartment(models.Model):
         return self.name
 
 
-class Reservation(models.Model):
-    user = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE)
-    apartment = models.ForeignKey(Apartment, related_name='reservations', on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
-    phone = models.CharField(max_length=30)
-    DURATION_TYPE = (
-        ('Day', 'Day'),
-        ('Week', 'Week'),
-        ('Month', 'Month'),
-        ('Year', 'Year')
-    )
-    duration_type_length = models.CharField(max_length=30, choices=DURATION_TYPE)
-    duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    STATUS = (
-        ('Paid', 'Paid'),
-        ('No Payment', 'No Payment')
-    )
-    first_payment = models.CharField(max_length=15, choices=STATUS, default="No Payment")
-    # made_payment = models.BooleanField(default=False)
+# class Reservation(models.Model):
+#     user = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE)
+#     apartment = models.ForeignKey(Apartment, related_name='reservations', on_delete=models.CASCADE)
+#     date = models.DateTimeField(auto_now_add=True)
+#     phone = models.CharField(max_length=30)
+#     DURATION_TYPE = (
+#         ('Day', 'Day'),
+#         ('Week', 'Week'),
+#         ('Month', 'Month'),
+#         ('Year', 'Year')
+#     )
+#     duration_type_length = models.CharField(max_length=30, choices=DURATION_TYPE)
+#     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
+#     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+#     STATUS = (
+#         ('Paid', 'Paid'),
+#         ('No Payment', 'No Payment')
+#     )
+#     first_payment = models.CharField(max_length=15, choices=STATUS, default="No Payment")
+#     # made_payment = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ["-date"]
-        verbose_name_plural = "6. Reservations"
+#     class Meta:
+#         ordering = ["-date"]
+#         verbose_name_plural = "6. Reservations"
 
-    def __str__(self):
-        return '{}'.format(self.apartment)
+#     def __str__(self):
+#         return '{}'.format(self.apartment)
        
