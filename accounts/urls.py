@@ -2,8 +2,8 @@ from django.urls import path
 from accounts import views as account_views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-# from django.conf import settings
-# from django.conf.urls.static import static
+from django.conf import settings
+from django.conf.urls.static import static
 
 #add namespace if you want, meaning to access these paths you have to do 'accounts:<url-name>'
 app_name = 'accounts'
@@ -17,8 +17,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html', success_url=reverse_lazy('accounts:password_reset_complete')), name='password_reset_confirm'),
     path('reset/complete/',auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),name='password_reset_complete'),
     path('myaccount/', account_views.UserUpdateView.as_view(), name='my_account'),
-    # path('mydashboard/', account_views.DashboardView.as_view(), name='my_dashboard'),
-    # path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation')
+    path('mydashboard/', account_views.DashboardView.as_view(), name='my_dashboard'),
+    path('cancel-reservation/<int:reservation>/', account_views.cancel_reservation, name='cancel_reservation')
 
    
 ]
