@@ -94,7 +94,7 @@ class Reservation(models.Model):
         ('Month', 'Month'),
         ('Year', 'Year')
     )
-    duration_type = models.CharField(max_length=7, choices=DURATION_TYPE)
+    duration_type = models.CharField(max_length=20, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     STATUS = (

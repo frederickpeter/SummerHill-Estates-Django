@@ -127,6 +127,7 @@ def incomplete_reservations():
             reservation.delete()
         elif time_diff_hours > 12:
             print("Send reminder to make payments for {}:".format(reservation.user.get_full_name()))
-            message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 24 hours if no payment is made."
-            # send_mail("SummerHill Estates: Apartment Reservation Payment",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+            message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 12 hours if no payment is made."
+            send_mail("SummerHill Estates: Apartment Reservation Payment (test)",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
 
+# def webhook(request):
