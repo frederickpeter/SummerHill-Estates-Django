@@ -110,22 +110,25 @@ def reserve_apartment(request, apartment):
     return render(request, 'reserve_apartment.html', {'form':form, 'apartment':apartment})
 
 
+# change implementation to send bulk mail instead. So perhaps put everything in an array and then send bulk email
+#when sending the mail, it should calculate an estimate time at which the reservation 
+# will be cancelled (this should be added to the mail), instead of saying after 12 hours
 def incomplete_reservations():
     print("Checking incomplete reservations")
     i_reservervations = Reservation.objects.filter(first_payment__exact="No Payment")
     current_time = timezone.now()
     for reservation in i_reservervations:
         time_diff_hours = (current_time - reservation.date).total_seconds()/3600
-        print(time_diff_hours)
+        # print(time_diff_hours)
         # print(dir(reservation.user))
         # print(reservation.user.get_full_name())
         # print(reservation.user.email)
-        if time_diff_hours > 24:
+        if time_diff_hours >= 24:
             print("Cancel reservation for {}:".format(reservation.user.get_full_name()))
             reservation.apartment.status = "Available"
             reservation.apartment.save()
             reservation.delete()
-        elif time_diff_hours > 12:
+        elif time_diff_hours >= 12:
             print("Send reminder to make payments for {}:".format(reservation.user.get_full_name()))
             message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 12 hours if no payment is made."
             send_mail("SummerHill Estates: Apartment Reservation Payment (test)",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
