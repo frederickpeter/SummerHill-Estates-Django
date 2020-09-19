@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 # from .models import Property, Room_Type, Apartment
-from .models import Property, Room_Type, Apartment, Reservation
+from .models import Property, Room_Type, Apartment, Reservation, Payment
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -147,20 +147,20 @@ def payment(request):
     response = requests.get('https://api.paystack.co/transaction/verify/'+reference, headers=headers)
     x = response.json()
 
-    # success = x['data']['status']
-    # amount = x['data']['amount'] / 100
+    success = x['data']['status']
+    amount = x['data']['amount'] / 100
 
-    # if success == "success":
+    if success == "success":
 
-    #     post = Payment.objects.create(
-    #         user = request.user,
-    #         reservation = reservation,
-    #         amount = amount
-    #     )
+        post = Payment.objects.create(
+            user = request.user,
+            reservation = reservation,
+            amount = amount
+        )
 
-    #     reservation = Reservation.objects.get(pk=reservation)
-    #     reservation.first_payment = "Paid"
-    #     reservation.save()
+        reservation = Reservation.objects.get(pk=reservation)
+        reservation.first_payment = "Paid"
+        reservation.save()
 
 
     return JsonResponse(x, safe=False)
