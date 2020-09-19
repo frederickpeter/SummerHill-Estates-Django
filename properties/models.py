@@ -1,6 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import UniqueConstraint
 
 def get_name(self):
     return '{} {}'.format(self.first_name, self.last_name)
@@ -54,13 +55,16 @@ class Property_Facility(models.Model):
 class Room_Type(models.Model):
     capacity = models.PositiveSmallIntegerField()
     property = models.ForeignKey(Property, related_name='room_types', on_delete=models.CASCADE)
-    price_per_day = models.DecimalField(null=True, blank=True, max_digits=7, decimal_places=2)
+    price_per_day = models.DecimalField(max_digits=7, decimal_places=2)
     image1 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
 
     class Meta:
         ordering = ["capacity"]
         verbose_name = "Room-Type"
         verbose_name_plural = "2. Room Types"
+        constraints=[
+            models.UniqueConstraint(name='unique_room_types',fields=['capacity', 'property'])
+        ]
 
     def __str__(self):
         return '{} {} - {}'.format(self.capacity, 'bedroom', self.property.name)

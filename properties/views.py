@@ -12,6 +12,7 @@ import datetime
 from django.utils import timezone
 from django.conf import settings
 import requests
+import json
 from django.http import JsonResponse
 
 #View for the Index Page

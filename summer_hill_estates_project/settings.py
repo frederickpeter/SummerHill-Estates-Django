@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'widget_tweaks',
-    "properties.apps.PropertiesConfig",
+    "properties",
 ]
 
 MIDDLEWARE = [
@@ -163,4 +163,4 @@ DEFAULT_FROM_EMAIL = 'Summer-hill-estates@gmail.com'
 ADMINS = [('Frederick Peter Plange', 'frederick.plange@alumni.ashesi.edu.gh')]
 SCHEDULER_AUTOSTART = True
 
-PAYSTACK_SECRET_KEY='sk_test_41991ee6feedc7de207b4e82ecae7ea8360225ba'
+PAYSTACK_SECRET_KEY='Bearer sk_test_41991ee6feedc7de207b4e82ecae7ea8360225ba'
