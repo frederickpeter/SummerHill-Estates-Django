@@ -1,12 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-# from .models import Property, Room_Type, Apartment
-from .models import Property, Room_Type, Apartment, Reservation
+from .models import Property, Room_Type, Apartment, Reservation, Payment
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from .forms import NewReservationForm
 from django.db.models import Count, Q
-from django.core.mail import send_mail
+from django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth.models import User
 import datetime
 from django.utils import timezone
@@ -114,14 +113,13 @@ def reserve_apartment(request, apartment):
 # change implementation to send bulk mail instead. So perhaps put everything in an array and then send bulk email
 #when sending the mail, it should calculate an estimate time at which the reservation 
 # will be cancelled (this should be added to the mail), instead of saying after 12 hours
-def incomplete_reservations():
+def incomplete_reservations(request):
     print("Checking incomplete reservations")
     i_reservervations = Reservation.objects.filter(first_payment__exact="No Payment")
     current_time = timezone.now()
+    message_list = []
     for reservation in i_reservervations:
         time_diff_hours = (current_time - reservation.date).total_seconds()/3600
-        # print(time_diff_hours)
-        # print(dir(reservation.user))
         # print(reservation.user.get_full_name())
         # print(reservation.user.email)
         if time_diff_hours >= 24:
@@ -131,9 +129,13 @@ def incomplete_reservations():
             reservation.delete()
         elif time_diff_hours >= 12:
             print("Send reminder to make payments for {}:".format(reservation.user.get_full_name()))
-            message = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after 12 hours if no payment is made."
-            send_mail("SummerHill Estates: Apartment Reservation Payment (test)",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+            time_to_cancel = round((24 - time_diff_hours))
+            message_info = "Hello " +reservation.user.get_full_name()+ ", you have made a reservation that you have not paid for. The reservation will be cancelled after "+str(time_to_cancel)+" hours if no payment is made."
+            message = ("SummerHill Estates: Apartment Reservation Payment (test)",message_info, "summer-hill-estates@gmail.com", [reservation.user.email])
+            message_list.append(message)
+            # send_mail("SummerHill Estates: Apartment Reservation Payment (test)",message, "summer-hill-estates@gmail.com", [reservation.user.email], fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
 
+    send_mass_mail(tuple(message_list), fail_silently=False)
 
 
 @login_required
@@ -147,20 +149,22 @@ def payment(request):
     response = requests.get('https://api.paystack.co/transaction/verify/'+reference, headers=headers)
     x = response.json()
 
-    # success = x['data']['status']
-    # amount = x['data']['amount'] / 100
+    success = x['data']['status']
+    amount = x['data']['amount'] / 100
 
-    # if success == "success":
+    if success == "success":
 
-    #     post = Payment.objects.create(
-    #         user = request.user,
-    #         reservation = reservation,
-    #         amount = amount
-    #     )
+        res = Reservation.objects.get(pk=reservation)
 
-    #     reservation = Reservation.objects.get(pk=reservation)
-    #     reservation.first_payment = "Paid"
-    #     reservation.save()
+        post = Payment.objects.create(
+            user = request.user,
+            reservation = res,
+            amount = amount
+        )
+
+        res.first_payment = "Paid"
+        res.total_paid += amount
+        res.save()
 
 
     return JsonResponse(x, safe=False)

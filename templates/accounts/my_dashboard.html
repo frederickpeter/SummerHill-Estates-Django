@@ -159,8 +159,14 @@
                               <td>{{reservation.duration}}</td>
                               <td>{{reservation.total_amount}}</td>
                               <!-- <td>{{reservation.status}}</td> -->
+                             
+                              {% ifnotequal reservation.total_amount reservation.total_paid %}
                               <td><a class="btn btn-danger" href="{% url 'accounts:cancel_reservation' reservation.pk %}">Cancel</a></td>
                               <td><a class="btn btn-primary" href="#" onclick="pay('{{reservation.pk}}','{{reservation.total_amount}}')">Pay</a></td>
+                              {% else %}
+                              <td>-</td>
+                              <td>Paid</td>
+                              {% endifnotequal %}
                            </tr>
                            {% endfor %}
                            {% endif %}

@@ -50,6 +50,13 @@ class Property_FacilityAdmin(admin.ModelAdmin):
 #admin.site.register(Property_Facility)
 
 
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    # search_fields = ("property__name__icontains", "facility__name__icontains")
+    list_per_page = 10
+#admin.site.register(Property_Facility)
+
+
 # Register out own model admin, based on the default UserAdmin
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):

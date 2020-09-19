@@ -101,6 +101,7 @@ class Reservation(models.Model):
     duration_type = models.CharField(max_length=30, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_paid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
     STATUS = (
         ('Paid', 'Paid'),
         ('No Payment', 'No Payment')
@@ -119,9 +120,10 @@ class Reservation(models.Model):
 class Payment(models.Model):
     user = models.ForeignKey(User, related_name='payments', on_delete=models.CASCADE)
     reservation = models.ForeignKey(Reservation, related_name='payments', on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, default='Pending', blank=True)
+    # status = models.CharField(max_length=50, default='Pending', blank=True)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     date_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["date_time"]
+        verbose_name_plural="7. Payments"

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, ListView
 from django.contrib.auth.decorators import login_required
-from properties.models import Reservation, Payment
+from properties.models import Reservation
 
 
 # Create your views here.
