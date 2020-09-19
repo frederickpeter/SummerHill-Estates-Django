@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from .forms import NewReservationForm
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
 from django.core.mail import send_mail, send_mass_mail
 from django.contrib.auth.models import User
 import datetime
@@ -163,8 +163,8 @@ def payment(request):
         )
 
         res.first_payment = "Paid"
-        res.total_paid += amount
-        res.save()
+        res.total_paid = F('total_paid') + amount
+        res.save( update_fields=["total_paid", "first_payment"] )
 
 
     return JsonResponse(x, safe=False)

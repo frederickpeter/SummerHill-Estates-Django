@@ -101,7 +101,7 @@ class Reservation(models.Model):
     duration_type = models.CharField(max_length=30, choices=DURATION_TYPE)
     duration = models.PositiveSmallIntegerField(help_text='Example. 2 Years')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    total_paid = models.DecimalField(null=True, blank=True, max_digits=10, decimal_places=2)
+    total_paid = models.DecimalField(blank=True, default=0, max_digits=10, decimal_places=2)
     STATUS = (
         ('Paid', 'Paid'),
         ('No Payment', 'No Payment')
