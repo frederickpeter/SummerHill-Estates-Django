@@ -119,7 +119,7 @@ class Reservation(models.Model):
 class Payment(models.Model):
     user = models.ForeignKey(User, related_name='payments', on_delete=models.CASCADE)
     reservation = models.ForeignKey(Reservation, related_name='payments', on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, default='Pending', blank=True)
+    # status = models.CharField(max_length=50, default='Pending', blank=True)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     date_time = models.DateTimeField(auto_now_add=True)
 
