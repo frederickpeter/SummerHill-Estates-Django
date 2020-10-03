@@ -23,7 +23,7 @@ class Facility(models.Model):
 class Property(models.Model):
     name = models.CharField(max_length=150, help_text='Name must be a maximum of 150 characters', unique=True)
     slug = models.SlugField(max_length=255, unique=True)
-    description = models.TextField(max_length=4000, help_text='Name must be a maximum of 4000 characters')
+    description = models.TextField(max_length=4000, help_text='Description must be a maximum of 4000 characters')
     image1 = models.ImageField(upload_to='images/', max_length=254)
     image2 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
     image3 = models.ImageField(null=True, blank=True, upload_to='images/', max_length=254)
@@ -67,7 +67,7 @@ class Room_Type(models.Model):
         ]
 
     def __str__(self):
-        return '{} {} - {}'.format(self.capacity, 'bedroom', self.property.name)
+        return '{} bedroom - {} Property '.format(self.capacity, self.property.name)
 
 
 class Apartment(models.Model):
@@ -125,5 +125,17 @@ class Payment(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["date_time"]
+        ordering = ["-date_time"]
         verbose_name_plural="7. Payments"
+
+class Blog(models.Model):
+    user = models.ForeignKey(User, related_name='articles', on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, help_text="Title must be max 100 characters", unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
+    image1 = models.ImageField(upload_to='images/', max_length=254)
+    content = models.TextField(max_length=5000, help_text='Content must be a maximum of 5000 characters')
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date_time"]
+        verbose_name_plural="8. Blogs"

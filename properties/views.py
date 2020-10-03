@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Property, Room_Type, Apartment, Reservation, Payment
+from .models import Property, Room_Type, Apartment, Reservation, Payment, Blog
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
@@ -16,13 +16,17 @@ from django.http import JsonResponse
 
 #View for the Index Page
 def index(request):
-    # incomplete_reservations()
     my_property = Property.objects.all()[:3]
-    return render(request, 'index.html', {'properties':my_property})
+    latest_blog = Blog.objects.order_by('-date_time')[:1]
+    blogs = Blog.objects.order_by('-date_time')[1:]
+    return render(request, 'index.html', {'properties':my_property, 'latest_blog':latest_blog, 'blogs':blogs})
 
 
 def about(request):
     return render(request, 'about.html')
+
+def blogs(request):
+    return render(request, 'myblog.html')
 
 
 class PropertyView(ListView):
@@ -30,6 +34,7 @@ class PropertyView(ListView):
     context_object_name = 'properties'
     template_name = 'properties.html'
     paginate_by = 6
+    
 
 
 def single_property(request, slug):

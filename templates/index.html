@@ -49,7 +49,7 @@
 									<a class="nav-link" href="{% url 'properties' %}">Properties</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link page-scroll" href="blog.html">Blog</a>
+									<a class="nav-link page-scroll" href="{% url 'blogs' %}">Blog</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="contact.html">Contact us</a>
@@ -232,7 +232,7 @@
                <div class="col-md-4 col-lg-4">
                   <div class="single_appartment_part">
                      <div class="appartment_img">
-                        <img src="{% static 'img/appertment_1.png' %}" alt="">
+                        <img src="{{ property.image1.url }}" alt="">
                         <div class="single_appartment_text">
                            <!-- <h3>$1,235632</h3> -->
                            <p><span class="ti-location-pin"></span> SummerHill Estate, East Legon Hills, Accra - Ghana.</p>
@@ -270,7 +270,7 @@
                   <img src="{% static 'img/room_1.png' %}" alt="">
                   <div class="room_text_1">
                      <h1>Beginning own <br> light divided male <br> is light</h1>
-                     <a href="#" class="btn_2">Read More <span class="ti-arrow-right"></span></a>
+                     <!-- <a href="#" class="btn_2">Read More <span class="ti-arrow-right"></span></a> -->
                   </div>
                </div>
             </div>
@@ -279,7 +279,7 @@
                   <img src="{% static 'img/room_2.png' %}" alt="">
                   <div class="room_text_2">
                      <h1>Beginning own <br> light divided male <br> is light</h1>
-                     <a href="#" class="btn_2">Read More <span class="ti-arrow-right"></span></a>
+                     <!-- <a href="#" class="btn_2">Read More <span class="ti-arrow-right"></span></a> -->
                   </div>
                </div>
             </div>
@@ -363,9 +363,15 @@
          <div class="row justify-content-center">
             <div class="col-lg-6">
                <div class="cta_iner">
+                  {% if user.is_authenticated %}
+                     <h1>Welcome {% firstof user.get_username %}</h1>
+                     <p>have you checked out our properties?</p>
+                     <a href="#" class="cta_btn">View our properties</a>
+                  {% else %}
                   <h1>Are You Ready To Move? </h1>
-                  <p>Create an account and reserve your room</p>
+                  <p>Create an account and reserve an apartment</p>
                   <a href="#" class="cta_btn">Log In</a>
+                  {% endif %}
                </div>
             </div>
          </div>
@@ -374,87 +380,66 @@
    <!--::cta_part end::-->
 
    <!--::blog_part start::-->
-   <div class="blog_part">
-      <div class="container">
-         <div class="row">
-            <div class="col-sm-8 col-lg-5">
-               <div class="section_tittle">
-                  <h1>Read Latest
-                     News From Our Blog</h1>
-               </div>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-6 col-lg-7">
-               <div class="single_blog">
-                  <div class="appartment_img">
-                     <img src="{% static 'img/blog_1.png' %}" alt="">
-                  </div>
-                  <div class="single_appartment_content">
-                     <p><a href="#">Apartment</a> / March 20, 2019</p>
-                     <a href="blog.html">
-                        <h4>Doee lights without darkness that said
-                           good deep years very.</h4>
-                     </a>
-                     <ul class="list-unstyled">
-                        <li><a href=""> <span class="ti-comment"></span> </a> 2 comment</li>
-                        <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li>
-                     </ul>
+   {% if latest_blog %}
+      <div class="blog_part">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-8 col-lg-5">
+                  <div class="section_tittle">
+                     <h1>Read Latest
+                        News From Our Blog</h1>
                   </div>
                </div>
             </div>
+            <div class="row">
+           
+                  <div class="col-md-6 col-lg-7">
+                     <div class="single_blog">
+                        <div class="appartment_img">
+                           <img src="{{ latest_blog.0.image1.url }}" alt="">
+                        </div>
+                        <div class="single_appartment_content">
+                           <!-- <p><a href="#">Apartment</a> / March 20, 2019</p> -->
+                           <p><a href="#">{{ latest_blog.0.date_time }}</p>
+                           <a href="#">
+                              <h4>{{ latest_blog.0.title }}.</h4>
+                           </a>
+                           <ul class="list-unstyled">
+                              <!-- <li><a href=""> <span class="ti-comment"></span> </a> 2 comment</li> -->
+                              <!-- <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li> -->
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+            
+            
             <div class="col-md-6 col-lg-5">
                <div class="right_single_blog">
-                  <div class="single_blog">
-                     <div class="media">
-                        <img src="{% static 'img/blog_2.png' %}" class=" mr-3" alt="...">
-                        <div class="media-body align-self-center">
-                           <p><a href="#">home</a></p>
-                           <a href="blog.html">
-                              <h5 class="mt-0">Green very from for rule stars seasons</h5>
-                           </a>
-                           <ul class="list-unstyled">
-                              <li><a href=""> <span class="ti-time"></span> </a> Mar 12</li>
-                              <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li>
-                           </ul>
+                  {% if blogs %}
+                     {% for blog in blogs %}
+                        <div class="single_blog">
+                           <div class="media">
+                              <img src="{{ blog.image1.url }}" class=" mr-3" alt="...">
+                              <div class="media-body align-self-center">
+                                 <p><a href="#">{{blog.date_time}}</a></p>
+                                 <a href="#">
+                                    <h5 class="mt-0">{{blog.title}}.</h5>
+                                 </a>
+                                 <ul class="list-unstyled">
+                                    <!-- <li><a href=""> <span class="ti-time"></span> </a> Mar 12</li>
+                                    <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li> -->
+                                 </ul>
+                              </div>
+                           </div>
                         </div>
-                     </div>
-                  </div>
-                  <div class="single_blog">
-                     <div class="media">
-                        <img src="{% static 'img/blog_3.png' %}" class="mr-3" alt="...">
-                        <div class="media-body align-self-center">
-                           <p><a href="#">Apartment</a></p>
-                           <a href="blog.html">
-                              <h5 class="mt-0">Moveth wherein subdue of brought</h5>
-                           </a>
-                           <ul class="list-unstyled">
-                              <li><a href=""> <span class="ti-time"></span> </a> Mar 12</li>
-                              <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li>
-                           </ul>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="single_blog">
-                     <div class="media">
-                        <img src="{% static 'img/blog_4.png' %}" class="mr-3" alt="...">
-                        <div class="media-body align-self-center">
-                           <p><a href="blog.html">Apartment</a></p>
-                           <a href="">
-                              <h5 class="mt-0">Firmament heaven cant him night rule</h5>
-                           </a>
-                           <ul class="list-unstyled">
-                              <li><a href=""> <span class="ti-time"></span> </a> Mar 12</li>
-                              <li><a href=""> <span class="ti-heart"></span> </a> 0 like</li>
-                           </ul>
-                        </div>
-                     </div>
-                  </div>
+                     {% endfor %}
+                  {% endif %}
                </div>
             </div>
          </div>
       </div>
    </div>
+   {% endif %}
    <!--::blog_part end::-->
 
    <!--::footer_part start::-->
@@ -475,7 +460,7 @@
                      <li><a href="{% url 'index' %}"> Home</a></li>
                      <li><a href="{% url 'about' %}">About</a></li>
                      <li><a href="{% url 'properties' %}">Properties</a></li>
-                     <li><a href="#">Blog</a></li>
+                     <li><a href="{% url 'blogs' %}">Blog</a></li>
                      <li><a href="#">Contact Us</a></li>
                   </ul>
                </div>

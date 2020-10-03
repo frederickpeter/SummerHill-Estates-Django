@@ -19,40 +19,50 @@ class FacilityAdmin(admin.ModelAdmin):
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    search_fields = ("name__contains", )
+    search_fields = ("name__icontains", )
     list_per_page = 10
     prepopulated_fields = {"slug": ("name",)}
 # admin.site.register(Property)
 
 @admin.register(Room_Type)
 class Room_Type_Admin(admin.ModelAdmin):
-    search_fields = ("capacity__contains", )
+    list_display = ("property", "capacity", "price_per_day")
+    search_fields = ("capacity__contains", "property__name__icontains", "price_per_day__contains")
     list_per_page = 10
 # admin.site.register(Room_Type)
 
 @admin.register(Apartment)
 class ApartmentAdmin(admin.ModelAdmin):
-    list_display = ("room_type", "name")
+    list_display = ("name", "room_type")
     search_fields = ("name__icontains", "room_type__property__name__icontains")
     list_per_page = 10
 #admin.site.register(Room)
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
+    list_display = ("user", "phone", "apartment", "total_amount", "total_paid", "date")
     search_fields = ("user__first_name__icontains", "user__last_name__icontains", "apartment__name__icontains", "phone__contains")
     list_per_page = 10
 #admin.site.register(Reservation)
 
 @admin.register(Property_Facility)
 class Property_FacilityAdmin(admin.ModelAdmin):
+    list_display = ("property", "facility")
     search_fields = ("property__name__icontains", "facility__name__icontains")
     list_per_page = 10
 #admin.site.register(Property_Facility)
 
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "date_time")
+    search_fields = ("title__icontains", "user__firstname__icontains", "user__lastname__icontains")
+    prepopulated_fields = {"slug": ("title",)}
+    list_per_page = 10
+
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    # search_fields = ("property__name__icontains", "facility__name__icontains")
+    list_display = ("user", "reservation", "amount", "date_time")
     list_per_page = 10
 #admin.site.register(Property_Facility)
 
